@@ -17,7 +17,7 @@ export class UserService {
       },
     });
   }
-  
+
   async users(params: {
     skip?: number;
     take?: number;
@@ -47,7 +47,7 @@ export class UserService {
     const hash = hashSync(data.password, salt);
     return this.prisma.user.create({
       data: {
-        username: data.username,
+        username: data.username.trim().toLowerCase(),
         hash,
       },
       select: {
@@ -63,7 +63,7 @@ export class UserService {
       // we'll throw an error
       const user = await this.prisma.user.findUnique({
         where: {
-          username: data.username,
+          username: data.username.trim().toLowerCase(),
         },
         rejectOnNotFound: true,
       });
@@ -87,10 +87,21 @@ export class UserService {
     data: Prisma.UserUpdateInput;
   }) {
     const { where, data } = params;
-    return this.prisma.user.update({
-      data,
-      where,
+    const user = await this.prisma.user.findUnique({
+      where: {
+        username: <string>data.username,
+      },
     });
+
+    if (!user) {
+      return this.prisma.user.update({
+        data: {
+          username: data.username,
+        },
+        where,
+      });
+    }
+    throw new InternalServerErrorException('Username already taken');
   }
 
   async deleteUser(where: Prisma.UserWhereUniqueInput) {
