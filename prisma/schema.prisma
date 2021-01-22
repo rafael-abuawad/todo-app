@@ -15,6 +15,7 @@ model User {
   username String @unique
   hash     String
   lists    List[]
+  tasks    Task[]
 }
 
 model List {
@@ -23,4 +24,16 @@ model List {
   createdAt DateTime @default(now())
   owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   Int
+  Task      Task[]
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  list        List     @relation(fields: [listId], references: [id])
+  listId      Int
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     Int
 }
