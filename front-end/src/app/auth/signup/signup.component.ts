@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +22,8 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private configService: ConfigService
   ) {
     this.signupForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -42,7 +49,7 @@ export class SignupComponent implements OnInit {
   }
 
   signup() {
-    this.loading = true
+    this.loading = true;
     this.httpClient
       .post('http://localhost:3000/api/auth/signup', {
         ...this.signupForm.value,
@@ -54,13 +61,13 @@ export class SignupComponent implements OnInit {
           } else {
             this.errorMsg = `Error: ${error.message}`;
           }
-          this.loading = false
+          this.loading = false;
           return of([]);
         })
       )
-      .subscribe(data => {
-        console.log(data)
-        this.loading = false
+      .subscribe((data) => {
+        console.log(data);
+        this.loading = false;
       });
   }
 }

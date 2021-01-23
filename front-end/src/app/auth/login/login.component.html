@@ -3,9 +3,7 @@
     <h2>Login</h2>
   </div>
   <div>
-    <div *ngIf="loading; else loadingBlock">
-      Loading...
-    </div>
+    <div *ngIf="loading; else loadingBlock">Loading...</div>
     <ng-template #loadingBlock>
       <form [formGroup]="loginForm" (submit)="login()">
         <div>

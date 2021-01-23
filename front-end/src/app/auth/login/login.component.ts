@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ConfigService } from '../config.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private configService: ConfigService
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -44,7 +51,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.loading = true
+    this.loading = true;
     this.httpClient
       .post('http://localhost:3000/api/auth/login', {
         ...this.loginForm.value,
@@ -56,13 +63,11 @@ export class LoginComponent implements OnInit {
           } else {
             this.errorMsg = `Error: ${error.message}`;
           }
-          this.loading = false
           return of([]);
         })
       )
-      .subscribe(data => {
-        console.log(data)
-        this.loading = false
+      .subscribe((data) => {
+        this.loading = false;
       });
   }
 }
