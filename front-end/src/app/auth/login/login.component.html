@@ -1,0 +1,46 @@
+<div>
+  <div>
+    <h2>Login</h2>
+  </div>
+  <div>
+    <div *ngIf="loading; else loadingBlock">
+      Loading...
+    </div>
+    <ng-template #loadingBlock>
+      <form [formGroup]="loginForm" (submit)="login()">
+        <div>
+          <label for="username">Username</label><br />
+          <input
+            formControlName="username"
+            type="text"
+            placeholder="Username"
+            required
+          />
+          <span *ngIf="username.invalid && username.touched">
+            The username is required
+          </span>
+        </div>
+        <div>
+          <label for="password">Password</label><br />
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="Password"
+            required
+          />
+          <span *ngIf="password.invalid && password.touched">
+            The password is required
+          </span>
+        </div>
+        <div>
+          <button type="submit" [disabled]="loginForm.invalid">Login</button>
+        </div>
+      </form>
+    </ng-template>
+  </div>
+  <div *ngIf="errorMsg">
+    <p>
+      {{ errorMsg }}
+    </p>
+  </div>
+</div>
