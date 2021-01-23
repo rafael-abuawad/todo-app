@@ -10,19 +10,20 @@ import {
   UseGuards,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { TaskService } from './task.service';
+import { ListService } from './list.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { Errr} from '@prisma/client'
 
-@Controller('api/tasks')
-export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+@Controller('api/lists')
+export class ListController {
+  constructor(private readonly listService: ListService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async tasks(@Req() req) {
+  async lists(@Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.taskService.tasks({
+      return await this.listService.lists({
         where: {
           ownerId,
         },
@@ -34,25 +35,30 @@ export class TaskController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createPost(
-    @Req() req,
-    @Body() data: { title: string; description: string; list: number },
-  ) {
+  async createList(@Req() req, @Body() data: {
+    title: string,
+    tasks?: Array<{ title: string; description: string; }>
+  }) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.taskService.createTask({
+      const tasks = (data.tasks || []).map(task => ({
+        ...tasks,
+        owner: {
+          connnect: {
+            id: ownerId
+          }
+        }
+      }))
+      return await this.listService.createList({
         title: data.title,
-        description: data.description,
         owner: {
           connect: {
             id: ownerId,
           },
         },
-        list: {
-          connect: {
-            id: data.list,
-          },
-        },
+        tasks: {
+          create: tasks
+        }
       });
     } catch (err) {
       return new InternalServerErrorException(err);
@@ -61,10 +67,10 @@ export class TaskController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async task(@Param('id') id: number, @Req() req) {
+  async list(@Param('id') id: number, @Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.taskService.task(ownerId, { id });
+      return await this.listService.list(ownerId, { id });
     } catch (err) {
       return new InternalServerErrorException(err);
     }
@@ -72,14 +78,14 @@ export class TaskController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  async updateTask(
+  async updateList(
     @Param('id') id: number,
-    @Body() data: { title: string; description: string },
+    @Body() data: { title: string },
     @Req() req,
   ) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.taskService.updateTask(ownerId, {
+      return await this.listService.updateList(ownerId, {
         where: { id },
         data,
       });
@@ -90,10 +96,10 @@ export class TaskController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteTask(@Param('id') id: number, @Req() req) {
+  async deleteList(@Param('id') id: number, @Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.taskService.deleteTask(ownerId, { id });
+      return await this.listService.deleteList(ownerId, { id });
     } catch (err) {
       return new InternalServerErrorException(err);
     }

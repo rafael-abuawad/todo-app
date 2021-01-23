@@ -10,20 +10,19 @@ import {
   UseGuards,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { ListService } from './list.service';
+import { TaskService } from './task.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-// import { Errr} from '@prisma/client'
 
-@Controller('api/lists')
-export class ListController {
-  constructor(private readonly listService: ListService) {}
+@Controller('api/tasks')
+export class TaskController {
+  constructor(private readonly taskService: TaskService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async lists(@Req() req) {
+  async tasks(@Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.listService.lists({
+      return await this.taskService.tasks({
         where: {
           ownerId,
         },
@@ -35,15 +34,22 @@ export class ListController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createList(@Req() req, @Body() data: { title: string }) {
+  async createPost(
+    @Req() req,
+    @Body() data: { title: string; description: string; list: number },
+  ) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.listService.createList({
+      return await this.taskService.createTask({
         title: data.title,
+        description: data.description,
         owner: {
           connect: {
             id: ownerId,
           },
+        },
+        list: {
+          connect: [...data.list],
         },
       });
     } catch (err) {
@@ -53,10 +59,10 @@ export class ListController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async list(@Param('id') id: number, @Req() req) {
+  async task(@Param('id') id: number, @Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.listService.list(ownerId, { id });
+      return await this.taskService.task(ownerId, { id });
     } catch (err) {
       return new InternalServerErrorException(err);
     }
@@ -64,14 +70,14 @@ export class ListController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  async updateList(
+  async updateTask(
     @Param('id') id: number,
-    @Body() data: { title: string },
+    @Body() data: { title: string; description: string },
     @Req() req,
   ) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.listService.updateList(ownerId, {
+      return await this.taskService.updateTask(ownerId, {
         where: { id },
         data,
       });
@@ -82,10 +88,10 @@ export class ListController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteList(@Param('id') id: number, @Req() req) {
+  async deleteTask(@Param('id') id: number, @Req() req) {
     try {
       const { userId: ownerId } = req.user;
-      return await this.listService.deleteList(ownerId, { id });
+      return await this.taskService.deleteTask(ownerId, { id });
     } catch (err) {
       return new InternalServerErrorException(err);
     }
