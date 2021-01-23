@@ -27,7 +27,7 @@ export class AuthController {
       const { userId: id } = req.user;
       return await this.userService.user({ id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -41,7 +41,7 @@ export class AuthController {
         data,
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -52,7 +52,7 @@ export class AuthController {
       const { userId: id } = req.user;
       return await this.userService.deleteUser({ id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -62,7 +62,7 @@ export class AuthController {
       const user = await this.userService.signup(data);
       return this.authService.login(user);
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -72,7 +72,7 @@ export class AuthController {
       const user = await this.userService.login(data);
       return this.authService.login(user);
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 }

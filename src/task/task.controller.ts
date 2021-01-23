@@ -28,7 +28,7 @@ export class TaskController {
         },
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -55,7 +55,7 @@ export class TaskController {
         },
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -66,7 +66,7 @@ export class TaskController {
       const { userId: ownerId } = req.user;
       return await this.taskService.task(ownerId, { id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -84,7 +84,7 @@ export class TaskController {
         data,
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -95,7 +95,7 @@ export class TaskController {
       const { userId: ownerId } = req.user;
       return await this.taskService.deleteTask(ownerId, { id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 }

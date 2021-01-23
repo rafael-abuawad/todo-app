@@ -18,7 +18,7 @@ export class UserController {
     try {
       return await this.userService.users({});
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -28,7 +28,7 @@ export class UserController {
     try {
       return await this.userService.user({ id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 }

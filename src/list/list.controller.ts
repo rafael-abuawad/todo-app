@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { Errr} from '@prisma/client'
 
 @Controller('api/lists')
 export class ListController {
@@ -28,13 +29,13 @@ export class ListController {
         },
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createPost(@Req() req, @Body() data: { title: string }) {
+  async createList(@Req() req, @Body() data: { title: string }) {
     try {
       const { userId: ownerId } = req.user;
       return await this.listService.createList({
@@ -46,7 +47,7 @@ export class ListController {
         },
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -57,7 +58,7 @@ export class ListController {
       const { userId: ownerId } = req.user;
       return await this.listService.list(ownerId, { id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -75,7 +76,7 @@ export class ListController {
         data,
       });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 
@@ -86,7 +87,7 @@ export class ListController {
       const { userId: ownerId } = req.user;
       return await this.listService.deleteList(ownerId, { id });
     } catch (err) {
-      throw new InternalServerErrorException(err);
+      return new InternalServerErrorException(err);
     }
   }
 }
