@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class ConfigService {
   constructor() {}
 
-  set setToken(token: string) {
+  setToken(token: string) {
     localStorage.setItem('access_token', token);
   }
 

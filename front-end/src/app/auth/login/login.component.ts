@@ -56,17 +56,14 @@ export class LoginComponent implements OnInit {
       .post('http://localhost:3000/api/auth/login', {
         ...this.loginForm.value,
       })
-      .pipe(
-        catchError((error) => {
-          if (error.error instanceof ErrorEvent) {
-            this.errorMsg = `Error: ${error.error.message}`;
-          } else {
-            this.errorMsg = `Error: ${error.message}`;
-          }
-          return of([]);
-        })
-      )
-      .subscribe((data) => {
+      .toPromise()
+      .then((data) => {
+        const { access_token } = data as any;
+        this.configService.setToken(access_token);
+        this.loading = false;
+      })
+      .catch((err) => {
+        this.errorMsg = err.error.message;
         this.loading = false;
       });
   }
