@@ -1,6 +1,13 @@
-import { Controller, Get, Param, BadRequestException } from '@nestjs/common';
+import {
+  UseGuards,
+  Controller,
+  Get,
+  Param,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -9,6 +16,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async users() {
     try {
       return await this.userService.users({});
@@ -18,6 +26,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async user(@Param('id') id: number) {
     try {
       return await this.userService.user({ id });
