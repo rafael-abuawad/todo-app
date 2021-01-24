@@ -7,9 +7,15 @@ import { ListsMenuComponent } from './components/lists-menu/lists-menu.component
 import { ListDetailComponent } from './components/list-detail/list-detail.component';
 import { AuthGuardService } from '../auth/services/auth-guard.service';
 import { ConfigService } from '../auth/services/config.service';
+import { AddListComponent } from './components/add-list/add-list.component';
 
 @NgModule({
-  declarations: [ListsComponent, ListsMenuComponent, ListDetailComponent],
+  declarations: [
+    ListsComponent,
+    ListsMenuComponent,
+    ListDetailComponent,
+    AddListComponent,
+  ],
   providers: [AuthGuardService, ConfigService],
   imports: [CommonModule, ReactiveFormsModule, ListsRoutingModule],
 })

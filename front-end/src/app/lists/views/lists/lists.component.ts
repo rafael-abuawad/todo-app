@@ -43,4 +43,8 @@ export class ListsComponent implements OnInit {
   setSeletedList(list: List) {
     this.list = list;
   }
+
+  newListAdded(list: List) {
+    this.lists.push(list);
+  }
 }

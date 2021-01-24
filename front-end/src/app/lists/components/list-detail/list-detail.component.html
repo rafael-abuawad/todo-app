@@ -6,13 +6,16 @@
     >
   </header>
   <main>
-    <ul *ngFor="let task of list.tasks; let i = index">
-      <li>
+    <ul>
+      <li *ngFor="let task of list.tasks; let i = index">
         <input type="checkbox" />
         <span>
           <strong>{{ task.title }}</strong>
           {{ task.description }}
         </span>
+      </li>
+      <li>
+        <button>Add task</button>
       </li>
     </ul>
   </main>

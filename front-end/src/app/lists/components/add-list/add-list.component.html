@@ -1,0 +1,30 @@
+<div *ngIf="!loading; else loadingElseBlock">
+  <form [formGroup]="listForm" (ngSubmit)="createList()">
+    <div>
+      <label>Title</label>
+      <input type="text" formControlName="title" placeholder="Title..." />
+    </div>
+
+    <div>
+      <label>Description</label>
+      <textarea cols="30" rows="10" formControlName="description"></textarea>
+    </div>
+
+    <div formArrayName="tasks">
+      <div
+        *ngFor="let task of listTasksForm.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <label>Title </label>
+        <input formControlName="title" />
+        <label>Description</label>
+        <input formControlName="description" />
+        <div (click)="removeTask(i)">Remove</div>
+      </div>
+    </div>
+    <div (click)="addTask()">Add task</div>
+
+    <button type="submit" [disabled]="listForm.invalid">Create form</button>
+  </form>
+</div>
+<ng-template #loadingElseBlock> Loading...--- </ng-template>
