@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http';
 import { ConfigService as AuthConfigService } from '../../../auth/services/config.service';
 import { List } from '../../interfaces/list.interface';
@@ -16,7 +17,8 @@ export class ListsComponent implements OnInit {
 
   constructor(
     private httpClient: HttpClient,
-    private authConfigService: AuthConfigService
+    private authConfigService: AuthConfigService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -40,5 +42,10 @@ export class ListsComponent implements OnInit {
 
   setCurrentList(idx: number) {
     this.list = this.lists[idx];
+  }
+
+  logoutUser() {
+    this.authConfigService.clearToken();
+    this.router.navigate(['login'])
   }
 }

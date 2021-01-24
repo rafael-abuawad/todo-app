@@ -1,4 +1,4 @@
-import { Task } from './task.dto';
+import { Task } from './task.interface';
 
 export interface List {
   id: number;

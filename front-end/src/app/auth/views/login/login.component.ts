@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
   FormGroup,
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
+    private router: Router,
     private configService: ConfigService
   ) {
     this.loginForm = this.formBuilder.group({
@@ -60,6 +62,7 @@ export class LoginComponent implements OnInit {
         const { access_token } = data as JwtPayload;
         this.configService.setToken = access_token;
         this.loading = false;
+        this.router.navigate(['']);
       })
       .catch((err) => {
         this.errorMsg = err.error.message;
