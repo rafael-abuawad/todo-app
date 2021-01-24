@@ -1,0 +1,41 @@
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  createdAt DateTime? @default(now())
+  lists     List[]
+  tasks     Task[]
+}
+
+model List {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now())
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    Int?
+  tasks       Task[]
+}
+
+model Task {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now())
+  completed   Boolean?  @default(false)
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    Int?
+  list        List?     @relation(fields: [listId], references: [id])
+  listId      Int?
+}
