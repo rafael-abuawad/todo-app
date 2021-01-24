@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdateListDto {
+export class UpdateTaskDto {
   @ApiProperty({ name: 'title', required: true })
   title: string;
 

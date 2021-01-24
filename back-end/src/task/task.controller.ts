@@ -11,22 +11,22 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ListService } from './list.service';
-import { CreateListDto } from './dto/create-list.dto';
-import { UpdateListDto } from './dto/update-list.dto';
+import { TaskService } from './task.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @ApiBearerAuth()
-@ApiTags('Lists')
-@Controller('api/lists')
-export class ListController {
-  constructor(private readonly listService: ListService) {}
+@ApiTags('Tasks')
+@Controller('api/tasks')
+export class TaskController {
+  constructor(private readonly taskService: TaskService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async lists(@Request() req) {
+  async tasks(@Request() req) {
     try {
-      return await this.listService.lists({
+      return await this.taskService.tasks({
         where: { authorId: req.user.userId },
       });
     } catch (err) {
@@ -36,9 +36,9 @@ export class ListController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async list(@Param('id') id: number, @Request() req) {
+  async task(@Param('id') id: number, @Request() req) {
     try {
-      return await this.listService.list(req.user.userid, { id });
+      return await this.taskService.task(req.user.userid, { id });
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
@@ -46,29 +46,20 @@ export class ListController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createList(@Request() req, @Body() data: CreateListDto) {
+  async createTask(@Request() req, @Body() data: CreateTaskDto) {
     try {
-      const tasks = data.tasks
-        ? data.tasks.map(task => ({
-            title: task.title,
-            description: task.description,
-            author: {
-              connect: {
-                id: req.user.userId,
-              },
-            },
-          }))
-        : [];
-      return await this.listService.createList({
+      return await this.taskService.createTask({
         title: data.title,
         description: data.description,
+        list: {
+          connect: {
+            id: data.list,
+          },
+        },
         author: {
           connect: {
             id: req.user.userId,
           },
-        },
-        tasks: {
-          create: tasks,
         },
       });
     } catch (err) {
@@ -78,13 +69,13 @@ export class ListController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  async updateList(
+  async updateTask(
     @Param('id') id: number,
     @Request() req,
-    @Body() data: UpdateListDto,
+    @Body() data: UpdateTaskDto,
   ) {
     try {
-      return await this.listService.updateList(req.user.userid, {
+      return await this.taskService.updateTask(req.user.userid, {
         where: { id },
         data: {
           title: data.title,
@@ -99,9 +90,9 @@ export class ListController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteList(@Param('id') id: number, @Request() req) {
+  async deleteTask(@Param('id') id: number, @Request() req) {
     try {
-      return await this.listService.deleteList(req.user.userid, { id });
+      return await this.taskService.deleteTask(req.user.userid, { id });
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
