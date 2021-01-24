@@ -1,0 +1,16 @@
+<div *ngIf="!loading; else loadingElseBlock">
+  <form [formGroup]="taskForm" (ngSubmit)="addTask()">
+    <div>
+      <label>Title</label>
+      <input type="text" formControlName="title" placeholder="Title..." />
+    </div>
+
+    <div>
+      <label>Description</label>
+      <textarea cols="30" rows="10" formControlName="description"></textarea>
+    </div>
+
+    <button type="submit" [disabled]="taskForm.invalid">Create task</button>
+  </form>
+</div>
+<ng-template #loadingElseBlock> Loading...--- </ng-template>

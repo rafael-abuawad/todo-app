@@ -8,4 +8,5 @@ import { List } from '../../interfaces/list.interface';
 })
 export class ListDetailComponent {
   @Input() list?: List;
+  canDisplayAddTask: boolean = false;
 }

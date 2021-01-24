@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService as AuthConfigService } from '../../../auth/services/config.service';
 import { List } from '../../interfaces/list.interface';
+import { Task } from '../../interfaces/task.interface';
 
 @Component({
   selector: 'app-lists',
@@ -11,18 +12,19 @@ import { List } from '../../interfaces/list.interface';
 })
 export class ListsComponent implements OnInit {
   lists: List[] = [];
-  list?: List = undefined;
-  loading: boolean = false;
-  errorMsg: string = '';
+  list?: List;
+  loading: boolean;
+  errorMsg: string;
 
   constructor(
     private httpClient: HttpClient,
     private authConfigService: AuthConfigService,
-    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
+    this.list = undefined;
+    this.lists = [];
     this.httpClient
       .get('http://localhost:3000/api/lists', {
         headers: {
@@ -40,11 +42,7 @@ export class ListsComponent implements OnInit {
       });
   }
 
-  setSeletedList(list: List) {
-    this.list = list;
-  }
-
-  newListAdded(list: List) {
-    this.lists.push(list);
+  setSelectedList(list: List) {
+    this.list = list
   }
 }

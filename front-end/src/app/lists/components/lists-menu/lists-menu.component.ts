@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { List } from '../../interfaces/list.interface';
@@ -9,18 +9,22 @@ import { ConfigService as AuthConfigService } from '../../../auth/services/confi
   templateUrl: './lists-menu.component.html',
   styleUrls: ['./lists-menu.component.css'],
 })
-export class ListsMenuComponent {
+export class ListsMenuComponent implements OnInit {
   @Input() lists: List[];
   @Output() listSelectedEvent: EventEmitter<List> = new EventEmitter<List>();
-  searchForm: FormGroup = this.formBuilder.group({
-    search: [''],
-  });
+  searchForm: FormGroup;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
     private authConfigService: AuthConfigService
   ) {}
+
+  ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      search: [''],
+    });
+  }
 
   selectList(list: List) {
     this.listSelectedEvent.emit(list);

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { List } from '../../interfaces/list.interface';
@@ -10,15 +10,14 @@ import { ConfigService as AuthConfigService } from '../../../auth/services/confi
   styleUrls: ['./add-list.component.css'],
 })
 export class AddListComponent implements OnInit {
+  loading: boolean = false;
+  listForm: FormGroup;
+
   constructor(
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
     private authConfigService: AuthConfigService
   ) {}
-
-  @Output() listAddedEvent: EventEmitter<List> = new EventEmitter<List>();
-  loading: boolean = false;
-  listForm: FormGroup;
 
   ngOnInit() {
     this.loading = false;
@@ -60,7 +59,6 @@ export class AddListComponent implements OnInit {
       )
       .toPromise()
       .then((data) => {
-        this.listAddedEvent.emit(data as List);
         this.listForm.reset();
         this.loading = false;
       })

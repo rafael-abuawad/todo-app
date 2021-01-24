@@ -15,12 +15,15 @@
         </span>
       </li>
       <li>
-        <button>Add task</button>
+        <button (click)="canDisplayAddTask = true">Add task</button>
       </li>
     </ul>
   </main>
 </article>
-<ng-template #noListBlock>
-  Select a list... or create one
-  <button>Create list +</button>
-</ng-template>
+<ng-template #noListBlock> No lists where found, create one! </ng-template>
+
+
+<div *ngIf="canDisplayAddTask && list">
+  <button (click)="canDisplayAddTask = false">X</button>
+  <app-add-task [listId]="list.id"></app-add-task>
+</div>
