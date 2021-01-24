@@ -1,1 +1,17 @@
-<p>lists-menu works!</p>
+<aside>
+  <p>Lists</p>
+  <div>
+    <form [formGroup]="searchForm">
+      <input formControlName="search" type="text" placeholder="Search..." />
+    </form>
+  </div>
+  <ul>
+    <li *ngFor="let list of filteredLists" (click)="selectList(list)">
+      <button>{{ list.title }}</button>
+    </li>
+    <li>
+      <button>Create lists +</button>
+    </li>
+  </ul>
+  <button (click)="logoutUser()">Logout</button>
+</aside>

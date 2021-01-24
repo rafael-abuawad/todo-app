@@ -1,1 +1,23 @@
-<p>list-detail works!</p>
+<article *ngIf="list; else noListBlock">
+  <header>
+    <h2>{{ list.title }}</h2>
+    <br /><span
+      ><small>{{ list.createdAt | date: "mediumDate" }}</small></span
+    >
+  </header>
+  <main>
+    <ul *ngFor="let task of list.tasks; let i = index">
+      <li>
+        <input type="checkbox" />
+        <span>
+          <strong>{{ task.title }}</strong>
+          {{ task.description }}
+        </span>
+      </li>
+    </ul>
+  </main>
+</article>
+<ng-template #noListBlock>
+  Select a list... or create one
+  <button>Create list +</button>
+</ng-template>

@@ -17,8 +17,8 @@ import { ListsModule } from './lists/lists.module';
     JwtModule.forRoot({
       config: {
         tokenGetter: () => localStorage.getItem('access_token'),
-         allowedDomains: ['localhost:3000']
-      }
+        allowedDomains: ['localhost:3000'],
+      },
     }),
     AppRoutingModule,
     AuthModule,

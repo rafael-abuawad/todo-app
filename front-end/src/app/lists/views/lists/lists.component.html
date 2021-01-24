@@ -1,43 +1,14 @@
 <div>
   <!-- Lists menu -->
   <div>
-    <aside>
-      <p>Lists</p>
-      <div>
-        <input type="text" placeholder="Search..." />
-      </div>
-      <ul>
-        <li *ngFor="let list of lists; let i = index">
-          <button (click)="setCurrentList(i)">{{ list.title }}</button>
-        </li>
-        <li>
-          <button>Create lists +</button>
-        </li>
-      </ul>
-      <button (click)="logoutUser()">Logout</button>
-    </aside>
+    <app-lists-menu
+      [lists]="lists"
+      (listSelectedEvent)="setSeletedList($event)"
+    ></app-lists-menu>
   </div>
   <!-- Lists detail -->
   <div>
-    <article *ngIf="list">
-      <header>
-        <h2>{{ list.title }}</h2>
-        <br /><span
-          ><small>{{ list.createdAt | date: "mediumDate" }}</small></span
-        >
-      </header>
-      <main>
-        <ul *ngFor="let task of list.tasks; let i = index">
-          <li>
-            <input type="checkbox" />
-            <span>
-              <strong>{{ task.title }}</strong>
-              {{ task.description }}
-            </span>
-          </li>
-        </ul>
-      </main>
-    </article>
+    <app-list-detail [list]="list"></app-list-detail>
   </div>
 </div>
 
