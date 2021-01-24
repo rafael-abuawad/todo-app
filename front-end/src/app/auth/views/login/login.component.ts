@@ -6,9 +6,8 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { ConfigService } from '../config.service';
+import { ConfigService } from '../../services/config.service';
+import { JwtPayload } from '../../interfaces/jwt-payload.interface';
 
 @Component({
   selector: 'app-login',
@@ -57,9 +56,9 @@ export class LoginComponent implements OnInit {
         ...this.loginForm.value,
       })
       .toPromise()
-      .then((data) => {
-        const { access_token } = data as any;
-        this.configService.setToken(access_token);
+      .then((data: any) => {
+        const { access_token } = data as JwtPayload;
+        this.configService.setToken = access_token;
         this.loading = false;
       })
       .catch((err) => {

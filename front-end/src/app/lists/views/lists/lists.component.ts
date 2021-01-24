@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConfigService as AuthConfigService } from '../../auth/config.service';
-import { List } from '../dto/list.dto';
+import { ConfigService as AuthConfigService } from '../../../auth/services/config.service';
+import { List } from '../../interfaces/list.interface';
 
 @Component({
   selector: 'app-lists',
@@ -10,7 +10,7 @@ import { List } from '../dto/list.dto';
 })
 export class ListsComponent implements OnInit {
   lists: List[] = [];
-  list: List | null = null;
+  list?: List = undefined;
   loading: boolean = false;
   errorMsg: string = '';
 
