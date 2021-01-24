@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(MainModule, { cors: true });
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('TO-DO')
     .setDescription('TO-DO RESTful API')
     .setVersion('0.1')
